@@ -1,0 +1,11 @@
+{
+    "FormattingOptions": {
+        "SpacingAfterMethodDeclarationName": true,
+        "OrganizeImports": true
+    },
+    "RoslynExtensionsOptions": {
+        "LocationPaths": [
+            "./.vscode/rulesets"
+        ]
+    }
+}
