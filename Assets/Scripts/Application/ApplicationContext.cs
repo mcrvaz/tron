@@ -1,27 +1,28 @@
 using System;
+using VContainer;
 using VContainer.Unity;
 
-public class ApplicationContext : IDisposable
+public class ApplicationContext : IInitializable, IDisposable
 {
+    public GameSessionContext GameSession { get; private set; }
     public ApplicationModel Model { get; }
     public ApplicationView View { get; }
     public ApplicationController Controller { get; }
-
     public ICoroutineRunner CoroutineRunner => View;
 
     readonly LifetimeScope parent;
-    readonly SceneLoader mainSceneLoader;
+    readonly IInstaller gameSessionInstaller;
 
     public ApplicationContext (
         LifetimeScope parent,
-        SceneLoader mainSceneLoader,
+        IInstaller gameSessionInstaller,
         ApplicationModel model,
         ApplicationView view,
         ApplicationController controller
     )
     {
         this.parent = parent;
-        this.mainSceneLoader = mainSceneLoader;
+        this.gameSessionInstaller = gameSessionInstaller;
         Model = model;
         View = view;
         Controller = controller;
@@ -29,17 +30,12 @@ public class ApplicationContext : IDisposable
 
     public void Initialize ()
     {
-        // View.Initialize();
-        // Model.Initialize();
-        // Controller.Initialize();
-        mainSceneLoader.OnSceneLoaded += HandleSceneLoaded;
-        CoroutineRunner.StartCoroutine(mainSceneLoader.LoadSceneAsync());
-    }
+        UnityEngine.Debug.Log("alo");
 
-    void HandleSceneLoaded ()
-    {
-        mainSceneLoader.OnSceneLoaded -= HandleSceneLoaded;
-
+        LifetimeScope child = parent.CreateChild(gameSessionInstaller);
+        child.name = "GameSessionScope";
+        GameSession = child.Container.Resolve<GameSessionContext>();
+        GameSession.Initialize();
     }
 
     public void Dispose ()

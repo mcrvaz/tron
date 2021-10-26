@@ -8,6 +8,7 @@ public class ApplicationInstaller : IInstaller
     {
         LifetimeScope parentScope = (LifetimeScope)builder.ApplicationOrigin;
         builder.Register<LifetimeScope>(x => parentScope, Lifetime.Scoped);
+        
         builder.Register<IInstaller, GameSessionInstaller>(Lifetime.Scoped);
         builder.Register<SceneLoader>(Lifetime.Scoped).WithParameter("Main");
         builder.Register<ApplicationContext>(Lifetime.Scoped);

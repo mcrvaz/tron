@@ -19,6 +19,11 @@ public class SceneLoader
         this.parent = parent;
     }
 
+    public void LoadScene ()
+    {
+        SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+    }
+
     public IEnumerator LoadSceneAsync ()
     {
         using (LifetimeScope.EnqueueParent(parent))
