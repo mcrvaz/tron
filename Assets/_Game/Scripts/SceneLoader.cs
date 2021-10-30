@@ -9,11 +9,13 @@ public class SceneLoader
     public event Action<Scene> OnSceneLoaded;
 
     readonly IInstaller installer;
+    readonly Func<MatchContext> matchContextFactory;
     readonly LifetimeScope parent;
 
-    public SceneLoader (LifetimeScope parent, IInstaller installer)
+    public SceneLoader (LifetimeScope parent, IInstaller installer, Func<MatchContext> matchContextFactory)
     {
         this.installer = installer;
+        this.matchContextFactory = matchContextFactory;
         this.parent = parent;
     }
 
@@ -31,6 +33,7 @@ public class SceneLoader
             AsyncOperation loading = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             while (!loading.isDone)
                 yield return null;
+            var a = matchContextFactory();
             OnSceneLoaded?.Invoke(SceneManager.GetSceneByName(sceneName));
         }
     }

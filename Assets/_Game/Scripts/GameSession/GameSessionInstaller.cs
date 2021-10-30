@@ -31,20 +31,18 @@ public class GameSessionInstaller : IInstaller
             Resources.Load<GameSessionView>("GameSessionView"), Lifetime.Scoped
         ).UnderTransform(parent.transform);
 
-        // builder.RegisterFactory<MatchContext>(
-        //     x => () => x.Resolve<MatchContext>(),
-        //     Lifetime.Scoped
-        // );
-        // builder.Register<MatchContext>(x =>
-        // {
-        //     LifetimeScope parent = (LifetimeScope)builder.ApplicationOrigin;
-        //     LifetimeScope scope = parent.CreateChildFromPrefab(
-        //         Resources.Load<MatchContext>("MatchContext"),
-        //         new MatchInstaller()
-        //     );
-        //     scope.Container.Inject(scope);
-        //     return (MatchContext)scope;
-        // }, Lifetime.Scoped);
-        builder.RegisterComponentInHierarchy<MatchContext>();
+        builder.RegisterFactory<MatchContext>(
+            x => () => x.Resolve<MatchContext>(),
+            Lifetime.Scoped
+        );
+        builder.Register<MatchContext>(x =>
+        {
+            LifetimeScope parent = (LifetimeScope)builder.ApplicationOrigin;
+            LifetimeScope scope = parent.CreateChildFromPrefab(
+                Resources.Load<MatchContext>("MatchContext"),
+                new MatchInstaller()
+            );
+            return (MatchContext)scope;
+        }, Lifetime.Scoped);
     }
 }

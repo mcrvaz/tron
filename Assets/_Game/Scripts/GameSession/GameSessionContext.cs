@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
@@ -20,12 +22,20 @@ public class GameSessionContext : LifetimeScope
 
     public void Initialize ()
     {
-        SceneLoader.OnSceneLoaded += HandleSceneLoaded;
-        StartCoroutine(SceneLoader.LoadSceneAsync("Level1"));
+        StartCoroutine(LoadSceneRoutine("Level1"));
     }
 
-    void HandleSceneLoaded (Scene scene)
+    IEnumerator LoadSceneRoutine (string sceneName)
     {
+        AsyncOperation loading = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        while (!loading.isDone)
+            yield return null;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(sceneName));
         MatchContext = MatchContextFactory();
+        MatchContext.transform.parent = null;
+        SceneManager.MoveGameObjectToScene(MatchContext.gameObject, SceneManager.GetActiveScene());
+        MatchContext.Build();
+        MatchContext.Container.Inject(MatchContext);
+        MatchContext.Initialize();
     }
 }
