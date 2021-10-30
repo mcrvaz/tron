@@ -4,6 +4,7 @@
         "OrganizeImports": true
     },
     "RoslynExtensionsOptions": {
+        "enableDecompilationSupport": true,
         "EnableAnalyzersSupport": true,
         "LocationPaths": [
             "./NuGet/microsoft.unity.analyzers.1.11.1/analyzers/dotnet/cs"

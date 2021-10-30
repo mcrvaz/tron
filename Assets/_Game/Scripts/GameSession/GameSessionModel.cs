@@ -3,14 +3,12 @@ using VContainer.Unity;
 
 public class GameSessionModel : IInitializable, IDisposable
 {
-    public void Initialize ()
+    public GameSessionModel ()
     {
-        LoadScene();
     }
 
-    public void LoadScene ()
+    public void Initialize ()
     {
-
     }
 
     public void Dispose ()

@@ -3,18 +3,12 @@ using VContainer.Unity;
 
 public class ApplicationModel : IInitializable, IDisposable
 {
-    public GameSessionModel GameSessionModel { get; private set; }
-
-    readonly Func<GameSessionModel> gameSessionModelFactory;
-
-    public ApplicationModel (Func<GameSessionModel> gameSessionModelFactory)
+    public ApplicationModel ()
     {
-        this.gameSessionModelFactory = gameSessionModelFactory;
     }
 
     public void Initialize ()
     {
-        GameSessionModel = gameSessionModelFactory();
     }
 
     public void Dispose () { }

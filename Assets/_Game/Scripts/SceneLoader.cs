@@ -6,25 +6,24 @@ using VContainer.Unity;
 
 public class SceneLoader
 {
-    public event Action OnSceneLoaded;
+    public event Action<Scene> OnSceneLoaded;
 
-    readonly string sceneName;
     readonly IInstaller installer;
     readonly LifetimeScope parent;
 
-    public SceneLoader (LifetimeScope parent, string sceneName, IInstaller installer)
+    public SceneLoader (LifetimeScope parent, IInstaller installer)
     {
-        this.sceneName = sceneName;
         this.installer = installer;
         this.parent = parent;
     }
 
-    public void LoadScene ()
+    public void LoadScene (string sceneName)
     {
         SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        OnSceneLoaded?.Invoke(SceneManager.GetSceneByName(sceneName));
     }
 
-    public IEnumerator LoadSceneAsync ()
+    public IEnumerator LoadSceneAsync (string sceneName)
     {
         using (LifetimeScope.EnqueueParent(parent))
         using (LifetimeScope.Enqueue(installer))
@@ -32,7 +31,7 @@ public class SceneLoader
             AsyncOperation loading = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
             while (!loading.isDone)
                 yield return null;
-            OnSceneLoaded?.Invoke();
+            OnSceneLoaded?.Invoke(SceneManager.GetSceneByName(sceneName));
         }
     }
 }

@@ -4,9 +4,7 @@ using VContainer.Unity;
 
 public class ApplicationRoot
 {
-    public static ApplicationModel Model { get; private set; }
-    public static ApplicationView View { get; private set; }
-    public static ApplicationController Controller { get; private set; }
+    public static ApplicationContext ApplicationContext { get; private set; }
 
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Main ()
@@ -17,24 +15,25 @@ public class ApplicationRoot
         VContainerSettings.Instance.EnableDiagnostics = false;
 #endif
 
-        LifetimeScope scope = LifetimeScope.Create(new RootInstaller().Install);
-        scope.name = "ApplicationContext";
-        GameObject.DontDestroyOnLoad(scope);
-        Instantiate(scope);
-        Initialize();
+        LifetimeScope rootScope = LifetimeScope.Create(Install);
+        rootScope.name = "Root";
+        GameObject.DontDestroyOnLoad(rootScope);
+
+        ApplicationContext = rootScope.Container.Resolve<ApplicationContext>();
+        ApplicationContext.Initialize();
     }
 
-    static void Instantiate (LifetimeScope scope)
+    static void Install (IContainerBuilder builder)
     {
-        Model = scope.Container.Resolve<ApplicationModel>();
-        View = scope.Container.Resolve<ApplicationView>();
-        Controller = scope.Container.Resolve<ApplicationController>();
-    }
-
-    static void Initialize ()
-    {
-        View.Initialize();
-        Model.Initialize();
-        Controller.Initialize();
+        builder.Register<ApplicationContext>(x =>
+        {
+            LifetimeScope parent = (LifetimeScope)builder.ApplicationOrigin;
+            LifetimeScope scope = parent.CreateChildFromPrefab(
+                Resources.Load<ApplicationContext>("ApplicationContext"),
+                new ApplicationInstaller()
+            );
+            scope.Container.Inject(scope);
+            return (ApplicationContext)scope;
+        }, Lifetime.Scoped);
     }
 }

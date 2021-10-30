@@ -6,6 +6,11 @@ public class GameSessionInstaller : IInstaller
 {
     public void Install (IContainerBuilder builder)
     {
+        LifetimeScope parent = (LifetimeScope)builder.ApplicationOrigin;
+        builder.Register<LifetimeScope>(x => parent, Lifetime.Scoped);
+        builder.Register<MatchInstaller>(Lifetime.Scoped).As<IInstaller>();
+        builder.Register<SceneLoader>(Lifetime.Scoped);
+
         builder.RegisterFactory<GameSessionModel>(
             (IObjectResolver resolver) => () => resolver.Resolve<GameSessionModel>(),
             Lifetime.Scoped
@@ -24,6 +29,22 @@ public class GameSessionInstaller : IInstaller
         );
         builder.RegisterComponentInNewPrefab(
             Resources.Load<GameSessionView>("GameSessionView"), Lifetime.Scoped
-        );
+        ).UnderTransform(parent.transform);
+
+        // builder.RegisterFactory<MatchContext>(
+        //     x => () => x.Resolve<MatchContext>(),
+        //     Lifetime.Scoped
+        // );
+        // builder.Register<MatchContext>(x =>
+        // {
+        //     LifetimeScope parent = (LifetimeScope)builder.ApplicationOrigin;
+        //     LifetimeScope scope = parent.CreateChildFromPrefab(
+        //         Resources.Load<MatchContext>("MatchContext"),
+        //         new MatchInstaller()
+        //     );
+        //     scope.Container.Inject(scope);
+        //     return (MatchContext)scope;
+        // }, Lifetime.Scoped);
+        builder.RegisterComponentInHierarchy<MatchContext>();
     }
 }
