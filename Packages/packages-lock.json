@@ -1,5 +1,15 @@
 {
   "dependencies": {
+    "com.syomus.proceduraltoolkit": {
+      "version": "https://github.com/Syomus/ProceduralToolkit.git#upm",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0",
+        "com.unity.mathematics": "1.1.0"
+      },
+      "hash": "bf167b0a0e6e09db63a345a7cb7ab1dac5170009"
+    },
     "com.unity.burst": {
       "version": "1.4.11",
       "depth": 0,
@@ -26,7 +36,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.11",
+      "version": "2.0.12",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -116,7 +126,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.29",
+      "version": "1.1.30",
       "depth": 0,
       "source": "registry",
       "dependencies": {

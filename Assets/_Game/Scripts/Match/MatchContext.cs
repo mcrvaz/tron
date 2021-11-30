@@ -12,6 +12,5 @@ public class MatchContext : LifetimeScope
 
     public void Initialize ()
     {
-        UnityEngine.Debug.Log("all gucci");
     }
 }

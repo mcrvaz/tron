@@ -9,18 +9,13 @@ public class ApplicationRoot
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Main ()
     {
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        VContainerSettings.Instance.EnableDiagnostics = true;
-#else
-        VContainerSettings.Instance.EnableDiagnostics = false;
-#endif
+        // _ = VContainerSettings.Instance;
+        // LifetimeScope rootScope = LifetimeScope.Create(Install);
+        // rootScope.name = "Root";
+        // GameObject.DontDestroyOnLoad(rootScope);
 
-        LifetimeScope rootScope = LifetimeScope.Create(Install);
-        rootScope.name = "Root";
-        GameObject.DontDestroyOnLoad(rootScope);
-
-        ApplicationContext = rootScope.Container.Resolve<ApplicationContext>();
-        ApplicationContext.Initialize();
+        // ApplicationContext = rootScope.Container.Resolve<ApplicationContext>();
+        // ApplicationContext.Initialize();
     }
 
     static void Install (IContainerBuilder builder)
