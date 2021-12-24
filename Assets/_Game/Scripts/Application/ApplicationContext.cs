@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.SceneManagement;
 using VContainer;
 using VContainer.Unity;
 
@@ -17,6 +18,8 @@ public class ApplicationContext : LifetimeScope
 
     public void Initialize ()
     {
+        if (SceneManager.GetActiveScene().name != "Main")
+            SceneManager.LoadScene("Main", LoadSceneMode.Single);
         GameSessionContext = GameSessionContextFactory();
         GameSessionContext.Initialize();
     }

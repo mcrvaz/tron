@@ -12,5 +12,6 @@ public class MatchContext : LifetimeScope
 
     public void Initialize ()
     {
+        Model.Initialize();
     }
 }

@@ -9,13 +9,12 @@ public class ApplicationRoot
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Main ()
     {
-        // _ = VContainerSettings.Instance;
-        // LifetimeScope rootScope = LifetimeScope.Create(Install);
-        // rootScope.name = "Root";
-        // GameObject.DontDestroyOnLoad(rootScope);
+        LifetimeScope rootScope = LifetimeScope.Create(Install);
+        rootScope.name = "Root";
+        GameObject.DontDestroyOnLoad(rootScope);
 
-        // ApplicationContext = rootScope.Container.Resolve<ApplicationContext>();
-        // ApplicationContext.Initialize();
+        ApplicationContext = rootScope.Container.Resolve<ApplicationContext>();
+        ApplicationContext.Initialize();
     }
 
     static void Install (IContainerBuilder builder)

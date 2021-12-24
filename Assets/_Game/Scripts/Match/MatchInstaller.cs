@@ -34,7 +34,8 @@ public class MatchInstaller : IInstaller
             Resources.Load<PlayerCharacterView>("PlayerCharacterView"),
             Lifetime.Scoped
         );
-        builder.RegisterComponentInHierarchy<MatchView>();
+        builder.RegisterComponentInHierarchy<MatchView>().AsSelf().As<ICoroutineRunner>();
         builder.RegisterComponentInHierarchy<MatchContext>();
+
     }
 }

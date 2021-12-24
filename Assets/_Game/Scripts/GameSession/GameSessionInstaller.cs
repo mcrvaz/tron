@@ -29,7 +29,7 @@ public class GameSessionInstaller : IInstaller
         );
         builder.RegisterComponentInNewPrefab(
             Resources.Load<GameSessionView>("GameSessionView"), Lifetime.Scoped
-        ).UnderTransform(parent.transform);
+        ).UnderTransform(parent.transform).AsSelf().As<ICoroutineRunner>();
 
         builder.RegisterFactory<MatchContext>(
             x => () => x.Resolve<MatchContext>(),
@@ -44,5 +44,11 @@ public class GameSessionInstaller : IInstaller
             );
             return (MatchContext)scope;
         }, Lifetime.Scoped);
+
+        builder.Register<InputActions>(Lifetime.Singleton);
+        builder.Register<InputWrapper>(Lifetime.Singleton)
+            .AsSelf()
+            .As<IInputProvider>();
+        builder.Register<GameInput>(Lifetime.Singleton);
     }
 }
